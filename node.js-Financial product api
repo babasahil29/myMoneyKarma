@@ -1,0 +1,22 @@
+Basic Express App Setup:
+const express = require('express'); const app = express();
+const port = 3000;
+
+// List of financial products const products = [
+{ id: 1, name: "Credit Card" },
+{ id: 2, name: "Personal Loan" },
+{ id: 3, name: "Savings Account" }
+];
+
+// Route to get the list of products app.get('/products', (req, res) => {
+res.json(products);
+});
+
+app.listen(port, () => {
+console.log(`Server running on http://localhost:${port}`);
+});
+Follow-up: Add a POST route to add new products. app.use(express.json()); // To parse JSON bodies
+
+// POST route to add a new product app.post('/products', (req, res) => { const newProduct = req.body;
+products.push(newProduct); // Add the new product to the list res.json(products); // Return the updated list
+});

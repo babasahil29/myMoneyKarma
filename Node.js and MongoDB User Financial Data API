@@ -1,0 +1,43 @@
+Setting up MongoDB with Mongoose:
+const express = require('express'); const mongoose = require('mongoose'); const app = express(); app.use(express.json());
+
+mongoose.connect('mongodb://localhost:27017/financialDB', { useNewUrlParser: true,
+useUnifiedTopology: true
+});
+
+const userSchema = new mongoose.Schema({ userId: String,
+income: Number, savings: Number, debt: Number
+});
+
+const User = mongoose.model('User', userSchema);
+
+// POST /users/data
+app.post('/users/data', async (req, res) => { try {
+const newUser = new User(req.body); await newUser.save(); res.json(newUser);
+} catch (error) { res.status(400).send('Error saving data');
+}
+});
+
+// GET /users/:userId/data app.get('/users/:userId/data', async (req, res) => {
+try {
+const user = await User.findOne({ userId: req.params.userId }); if (!user) return res.status(404).send('User not found');
+ 
+res.json(user);
+} catch (error) {
+res.status(400).send('Error retrieving data');
+}
+});
+
+app.listen(3000, () => {
+console.log('Server running on http://localhost:3000');
+});
+Follow-up: Add an update endpoint for financial data.
+// PATCH /users/:userId/data - Update user's financial data app.patch('/users/:userId/data', async (req, res) => {
+try {
+const updates = req.body;
+const user = await User.findOneAndUpdate({ userId: req.params.userId }, updates, { new: true }); if (!user) return res.status(404).send('User not found');
+res.json(user);
+} catch (error) {
+res.status(400).send('Error updating data');
+}
+});

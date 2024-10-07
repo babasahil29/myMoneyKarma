@@ -1,0 +1,31 @@
+import React, { useState } from 'react';
+
+function FinancialDashboard() {
+const [financialData, setFinancialData] = useState({ income: '', expenses: '', savings: '' }); const [advice, setAdvice] = useState('');
+ 
+const handleChange = (e) => { setFinancialData({
+...financialData, [e.target.name]: e.target.value
+});
+};
+
+const handleSubmit = async (e) => { e.preventDefault();
+const response = await fetch('http://localhost:3000/financial-advice', { method: 'POST',
+headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(financialData)
+});
+const result = await response.json(); setAdvice(result.advice);
+};
+
+return (
+<div>
+<form onSubmit={handleSubmit}>
+<input name="income" placeholder="Income" onChange={handleChange} />
+<input name="expenses" placeholder="Expenses" onChange={handleChange} />
+<input name="savings" placeholder="Savings" onChange={handleChange} />
+<button type="submit">Get Advice</button>
+</form>
+{advice && <div>{advice}</div>}
+</div>
+);
+}
+
+export default FinancialDashboard;

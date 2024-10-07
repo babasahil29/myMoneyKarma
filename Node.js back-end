@@ -1,0 +1,15 @@
+Node.js Back-End:
+app.post('/financial-advice', (req, res) => {
+const { income, expenses, savings } = req.body; let advice = '';
+
+if (savings < 0.1 * income) {
+advice = 'You should save more!';
+ 
+} else if (expenses > 0.8 * income) {
+advice = 'Try to reduce your discretionary spending.';
+} else {
+advice = 'Your finances are in good shape!';
+}
+
+res.json({ advice });
+});
